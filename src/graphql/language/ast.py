@@ -450,7 +450,7 @@ class DirectiveNode(Node):
     __slots__ = "name", "arguments"
 
     name: NameNode
-    arguments: FrozenList[ArgumentNode]
+    arguments: FrozenSet[ArgumentNode]
 
 
 # Type Reference
