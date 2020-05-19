@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Optional, Union, TypeVar, cast
+from typing import Callable, Dict, List, Optional, Union, TypeVar, cast, FrozenSet
 from functools import partial
 
 from .ast import (
@@ -288,7 +288,7 @@ class Parser:
         """SelectionSet: {Selection+}"""
         start = self._lexer.token
         return SelectionSetNode(
-            selections=set(self.many(
+            selections=frozenset(self.many(
                 TokenKind.BRACE_L, self.parse_selection, TokenKind.BRACE_R
             )),
             loc=self.loc(start),
@@ -321,10 +321,10 @@ class Parser:
             loc=self.loc(start),
         )
 
-    def parse_arguments(self, is_const: bool) -> List[ArgumentNode]:
+    def parse_arguments(self, is_const: bool) -> FrozenSet[ArgumentNode]:
         """Arguments[Const]: (Argument[?Const]+)"""
         item = self.parse_const_argument if is_const else self.parse_argument
-        return self.optional_many(TokenKind.PAREN_L, item, TokenKind.PAREN_R)
+        return frozenset(self.optional_many(TokenKind.PAREN_L, item, TokenKind.PAREN_R))
 
     def parse_argument(self) -> ArgumentNode:
         """Argument: Name : Value"""
@@ -456,7 +456,7 @@ class Parser:
         start = self._lexer.token
         item = partial(self.parse_object_field, is_const)
         return ObjectValueNode(
-            fields=self.any(TokenKind.BRACE_L, item, TokenKind.BRACE_R),
+            fields=frozenset(self.any(TokenKind.BRACE_L, item, TokenKind.BRACE_R)),
             loc=self.loc(start),
         )
 

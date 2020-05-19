@@ -342,7 +342,7 @@ class FieldNode(SelectionNode):
 
     alias: Optional[NameNode]
     name: NameNode
-    arguments: Optional[FrozenList["ArgumentNode"]]
+    arguments: Optional[FrozenSet["ArgumentNode"]]
     selection_set: Optional[SelectionSetNode]
 
 
@@ -433,7 +433,7 @@ class ListValueNode(ValueNode):
 class ObjectValueNode(ValueNode):
     __slots__ = ("fields",)
 
-    fields: FrozenList["ObjectFieldNode"]
+    fields: FrozenSet["ObjectFieldNode"]
 
 
 class ObjectFieldNode(Node):
