@@ -288,9 +288,9 @@ class Parser:
         """SelectionSet: {Selection+}"""
         start = self._lexer.token
         return SelectionSetNode(
-            selections=self.many(
+            selections=set(self.many(
                 TokenKind.BRACE_L, self.parse_selection, TokenKind.BRACE_R
-            ),
+            )),
             loc=self.loc(start),
         )
 

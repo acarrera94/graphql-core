@@ -1,6 +1,6 @@
 from copy import copy, deepcopy
 from enum import Enum
-from typing import List, Optional, Union
+from typing import List, Optional, Union, FrozenSet
 
 from .source import Source
 from .token_kind import TokenKind
@@ -234,6 +234,8 @@ class Node:
             value = kwargs.get(key)
             if isinstance(value, list) and not isinstance(value, FrozenList):
                 value = FrozenList(value)
+            elif isinstance(value, set) and not isinstance(value, FrozenList):
+                value = set(value)
             setattr(self, key, value)
 
     def __repr__(self):
@@ -326,7 +328,7 @@ class VariableDefinitionNode(Node):
 class SelectionSetNode(Node):
     __slots__ = ("selections",)
 
-    selections: FrozenList["SelectionNode"]
+    selections: FrozenSet["SelectionNode"]
 
 
 class SelectionNode(Node):
